@@ -1,7 +1,7 @@
 import { getModel } from "../config/llmModels.js"
 import axios from "axios"
-import { uploadToS3 } from "../utils/uploadToS3.js"
-import { getFromS3 } from "../utils/getFromS3.js"
+import { uploadFile } from "../utils/uploadFile.js"
+import { getFileUrl } from "../utils/getFileUrl.js"
 import { deductCredits } from "../utils/deductCredits.js"
 import { checkAgentLimit } from "../config/agentLimit.js"
 export const visionAgent=async (state) => {
@@ -44,8 +44,8 @@ await deductCredits(state.userId,"vision")
 const buffer=Buffer.from(imageRes.data)
 const filename=`image-${Date.now()}.png`
 
-await uploadToS3(filename,buffer,"image/png")
-const downloadUrl=await getFromS3(filename,24*60)
+await uploadFile(filename,buffer,"image/png")
+const downloadUrl=await getFileUrl(filename,24*60)
 
 return {
     ...state,
